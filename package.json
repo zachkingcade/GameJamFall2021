@@ -1,0 +1,64 @@
+{
+  "name": "kt_game_starter",
+  "version": "0.0.1",
+  "description": "King's Tithe Game Starter for Phaser",
+  "author": "jeremyglebe",
+  "homepage": "https://github.com/Kings-Tithe/dicerole_engine#readme",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kings-Tithe/dicerole_engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kings-Tithe/dicerole_engine/issues"
+  },
+  "keywords": [
+    "Phaser",
+    "Phaser 3",
+    "Phaser3",
+    "TypeScript",
+    "Webpack",
+    "dungeon",
+    "interaction",
+    "character",
+    "evolution",
+    "tabletop",
+    "roleplaying",
+    "engine",
+    "combat",
+    "grid",
+    "skills"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.11.4",
+    "@babel/preset-env": "^7.11.0",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.0.3",
+    "source-map-loader": "^1.0.2",
+    "ts-loader": "^8.0.3",
+    "typescript": "^4.0.2",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@capacitor-community/electron": "^1.3.2",
+    "@capacitor/android": "^2.4.4",
+    "@capacitor/cli": "^2.4.4",
+    "@capacitor/core": "^2.4.4",
+    "phaser": "^3.24.1"
+  },
+  "scripts": {
+    "dev": "webpack && webpack-dev-server --mode development --open",
+    "dev:lan": "webpack && webpack-dev-server --mode development --host 0.0.0.0",
+    "prod": "webpack && webpack-dev-server --mode production",
+    "build": "webpack --mode production && npx cap copy",
+    "android:init": "npm run build && cap add android",
+    "android": "npm run build && cap open android",
+    "electron:init": "npm run build && cap add @capacitor-community/electron",
+    "electron": "npm run build && cap open @capacitor-community/electron",
+    "template:init": "git remote add template https://github.com/Kings-Tithe/kt_game_starter.git",
+    "template:update": "git fetch --all && git merge template/master --allow-unrelated-histories"
+  }
+}

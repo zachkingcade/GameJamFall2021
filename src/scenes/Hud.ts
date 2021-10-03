@@ -35,78 +35,78 @@ export class Hud extends Scene {
 
     create(){
         this.createSingalListeners();
-        this.createCoinCounter();
+        //this.createCoinCounter();
         this.createLevelTimer();
-        this.createEggCounter();
+        //this.createEggCounter();
     }
 
     createSingalListeners(){
-        this.singalManager.on("TotalCoinCount", (total:number) => {
-            this.totalCoinCount = total;
-            this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
-        }, this);
-        this.singalManager.on("coinCollected", (screenCoords) => {
-            let travelCoin = this.add.sprite(screenCoords[0], screenCoords[1], "coin");
-            travelCoin.setOrigin(0,0);
-            travelCoin.setScale(.5,.5);
-            travelCoin.play("coinSpin");
-            this.add.tween({
-                targets: travelCoin,
-                repeat: false,
-                x: 15,
-                y: 15,
-                duration: 600,
-                onComplete: () => {
-                    travelCoin.destroy();
-                }
-            })
-            this.currentCoinCount++;
-            this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
-            if(this.currentCoinCount == this.totalCoinCount){
-                this.stopLevelTime();
-            }  
-        });
-        this.singalManager.on("eggCollected", (screenCoords) => {
-            let travelEgg = this.add.sprite(screenCoords[0], screenCoords[1], "eggGreen");
-            travelEgg.setOrigin(0,0);
-            travelEgg.setScale(.5,.5);
-            let rays = this.add.sprite(screenCoords[0] + 30, screenCoords[1] + 30, "godRays");
-            rays.setOrigin(.5,.5);
-            rays.setScale(3,3);
-            rays.setDepth(-1);
-            this.totalEggCount++;
-            let eggTimeline = this.tweens.createTimeline();
-            eggTimeline.add({
-                targets: travelEgg,
-                repeat: false,
-                y: this.sys.game.scale.gameSize.height /8,
-                duration: 1500,
-            })
-            eggTimeline.add({
-                targets: travelEgg,
-                repeat: false,
-                x: this.sys.canvas.width-(this.totalEggCount * 64),
-                y: 15,
-                duration: 500,
-                onComplete: () => {
-                    travelEgg.destroy();
-                    this.eggCountSymbols[this.totalEggCount].clearTint();
-                },
-            })
-            eggTimeline.play();
-            this.add.tween({
-                targets: rays,
-                repeat: false,
-                duration: 1500,
-                angle: 200,
-                onComplete: () => {
-                    rays.destroy();
-                },
-                onUpdate: () => {
-                    rays.y = travelEgg.y + 30;
-                }
-            })
-        });
+        // this.singalManager.on("TotalCoinCount", (total:number) => {
+        //     this.totalCoinCount = total;
+        //     this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
+        // }, this);
+        // this.singalManager.on("coinCollected", (screenCoords) => {
+        //     let travelCoin = this.add.sprite(screenCoords[0], screenCoords[1], "coin");
+        //     travelCoin.setOrigin(0,0);
+        //     travelCoin.setScale(.5,.5);
+        //     travelCoin.play("coinSpin");
+        //     this.add.tween({
+        //         targets: travelCoin,
+        //         repeat: false,
+        //         x: 15,
+        //         y: 15,
+        //         duration: 600,
+        //         onComplete: () => {
+        //             travelCoin.destroy();
+        //         }
+        //     })
+        //     this.currentCoinCount++;
+        //     this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
+        //     if(this.currentCoinCount == this.totalCoinCount){
+        //         this.stopLevelTime();
+        //     }  
+        // });
+        // this.singalManager.on("eggCollected", (screenCoords) => {
+        //     let travelEgg = this.add.sprite(screenCoords[0], screenCoords[1], "eggGreen");
+        //     travelEgg.setOrigin(0,0);
+        //     travelEgg.setScale(.5,.5);
+        //     let rays = this.add.sprite(screenCoords[0] + 30, screenCoords[1] + 30, "godRays");
+        //     rays.setOrigin(.5,.5);
+        //     rays.setScale(3,3);
+        //     rays.setDepth(-1);
+        //     this.totalEggCount++;
+        //     let eggTimeline = this.tweens.createTimeline();
+        //     eggTimeline.add({
+        //         targets: travelEgg,
+        //         repeat: false,
+        //         y: this.sys.game.scale.gameSize.height /8,
+        //         duration: 1500,
+        //     })
+        //     eggTimeline.add({
+        //         targets: travelEgg,
+        //         repeat: false,
+        //         x: this.sys.canvas.width-(this.totalEggCount * 64),
+        //         y: 15,
+        //         duration: 500,
+        //         onComplete: () => {
+        //             travelEgg.destroy();
+        //             this.eggCountSymbols[this.totalEggCount].clearTint();
+        //         },
+        //     })
+        //     eggTimeline.play();
+        //     this.add.tween({
+        //         targets: rays,
+        //         repeat: false,
+        //         duration: 1500,
+        //         angle: 200,
+        //         onComplete: () => {
+        //             rays.destroy();
+        //         },
+        //         onUpdate: () => {
+        //             rays.y = travelEgg.y + 30;
+        //         }
+        //     })
+        // });
         this.singalManager.on("levelTimerStart", () => {
             this.startLevelTime();
         })

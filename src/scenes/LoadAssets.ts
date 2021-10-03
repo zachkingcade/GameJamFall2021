@@ -13,10 +13,12 @@ export class LoadAssets extends Scene {
     preload(){
         //our pengoon
         this.load.spritesheet("blueDino",`${this.assets}/images/characters/Dino/DinoSpritesBlue.png`,{ frameWidth: 24, frameHeight: 24});
+        this.load.image("pengoon",`${this.assets}/images/characters/Pengoon.png`);
 
         //images
         this.load.image("baseLevelSpriteSheet",`${this.assets}/images/texture.png`);
         this.load.image("background",`${this.assets}/images/BG.png`);
+        this.load.image("present",`${this.assets}/images/present.png`);
 
         //tilemaps
         this.load.tilemapTiledJSON("baseWorld", `${this.assets}/maps/baseWorld.json`);

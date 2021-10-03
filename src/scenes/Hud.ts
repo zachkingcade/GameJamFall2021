@@ -35,37 +35,23 @@ export class Hud extends Scene {
 
     create(){
         this.createSingalListeners();
-        //this.createCoinCounter();
+        this.createCoinCounter();
         this.createLevelTimer();
         //this.createEggCounter();
     }
 
     createSingalListeners(){
-        // this.singalManager.on("TotalCoinCount", (total:number) => {
-        //     this.totalCoinCount = total;
-        //     this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
-        // }, this);
-        // this.singalManager.on("coinCollected", (screenCoords) => {
-        //     let travelCoin = this.add.sprite(screenCoords[0], screenCoords[1], "coin");
-        //     travelCoin.setOrigin(0,0);
-        //     travelCoin.setScale(.5,.5);
-        //     travelCoin.play("coinSpin");
-        //     this.add.tween({
-        //         targets: travelCoin,
-        //         repeat: false,
-        //         x: 15,
-        //         y: 15,
-        //         duration: 600,
-        //         onComplete: () => {
-        //             travelCoin.destroy();
-        //         }
-        //     })
-        //     this.currentCoinCount++;
-        //     this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
-        //     if(this.currentCoinCount == this.totalCoinCount){
-        //         this.stopLevelTime();
-        //     }  
-        // });
+        this.singalManager.on("TotalCoinCount", (total:number) => {
+            this.totalCoinCount = total;
+            this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
+        }, this);
+        this.singalManager.on("coinCollected", (screenCoords) => {
+            this.currentCoinCount++;
+            this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
+            if(this.currentCoinCount == this.totalCoinCount){
+                this.stopLevelTime();
+            }  
+        });
         // this.singalManager.on("eggCollected", (screenCoords) => {
         //     let travelEgg = this.add.sprite(screenCoords[0], screenCoords[1], "eggGreen");
         //     travelEgg.setOrigin(0,0);
@@ -113,10 +99,9 @@ export class Hud extends Scene {
     }
 
     createCoinCounter(){
-        let coinCountSymbol = this.add.sprite(15,15,"coin");
+        let coinCountSymbol = this.add.sprite(15,15,"present");
         coinCountSymbol.setOrigin(0,0);
-        coinCountSymbol.setScale(.5,.5);
-        coinCountSymbol.play("coinSpin");
+        coinCountSymbol.setScale(.05);
         this.coinCountText = this.add.text(85,15,`${this.currentCoinCount}/${this.totalCoinCount}`,{
             fontSize: "75px",
             color: "#FFD700"
@@ -154,5 +139,6 @@ export class Hud extends Scene {
 
     stopLevelTime(){
         clearInterval(this.levelTimeInterval);
+        this.levelTimeText.setColor("#FFD700");
     }
 }

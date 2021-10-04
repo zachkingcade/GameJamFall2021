@@ -6,14 +6,15 @@ import { Plugins } from '@capacitor/core';
 import { SCREEN_WIDE, SCREEN_RATIO } from './constants';
 import { readFile, writeFile } from './util/file-ops';
 import { Hud } from './scenes/Hud';
+import { Title } from './scenes/Title';
 
 const config: Phaser.Types.Core.GameConfig = {
     parent: 'game',
     type: Phaser.AUTO,
     backgroundColor: '#000',
     // Example of sizing based on w/h ratio
-    width: SCREEN_WIDE ? 800 * SCREEN_RATIO : 800,
-    height: SCREEN_WIDE ? 800 : 800 / SCREEN_RATIO,
+    width: 1600,
+    height: 800,
     zoom: 1,
     dom: {
         createContainer: true
@@ -28,7 +29,7 @@ const config: Phaser.Types.Core.GameConfig = {
     physics:{
         default: "arcade",
         arcade:{ 
-            debug: true,
+            debug: false,
             gravity: {y: 750},
             tileBias: 96
         },
@@ -44,8 +45,11 @@ export class KTGame extends Phaser.Game {
 
         super(config);
 
+        console.log(config);
+
         // Example of scene management
         this.scene.add("LoadAssets", LoadAssets, true);
+        this.scene.add("Title", Title, false)
         this.scene.add("FirstLevel", FirstLevel, false);
         this.scene.add("Hud", Hud, false);
 

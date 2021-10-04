@@ -50,49 +50,14 @@ export class Hud extends Scene {
             this.coinCountText.setText(`${this.currentCoinCount}/${this.totalCoinCount}`);
             if(this.currentCoinCount == this.totalCoinCount){
                 this.stopLevelTime();
+                this.levelTimeText.setColor("#FFD700");
+                this.sound.play("win");
+                setTimeout(() => {
+                    this.singalManager.emit("returnTitle");
+                    this.scene.stop();
+                }, 5000);
             }  
         });
-        // this.singalManager.on("eggCollected", (screenCoords) => {
-        //     let travelEgg = this.add.sprite(screenCoords[0], screenCoords[1], "eggGreen");
-        //     travelEgg.setOrigin(0,0);
-        //     travelEgg.setScale(.5,.5);
-        //     let rays = this.add.sprite(screenCoords[0] + 30, screenCoords[1] + 30, "godRays");
-        //     rays.setOrigin(.5,.5);
-        //     rays.setScale(3,3);
-        //     rays.setDepth(-1);
-        //     this.totalEggCount++;
-        //     let eggTimeline = this.tweens.createTimeline();
-        //     eggTimeline.add({
-        //         targets: travelEgg,
-        //         repeat: false,
-        //         y: this.sys.game.scale.gameSize.height /8,
-        //         duration: 1500,
-        //     })
-        //     eggTimeline.add({
-        //         targets: travelEgg,
-        //         repeat: false,
-        //         x: this.sys.canvas.width-(this.totalEggCount * 64),
-        //         y: 15,
-        //         duration: 500,
-        //         onComplete: () => {
-        //             travelEgg.destroy();
-        //             this.eggCountSymbols[this.totalEggCount].clearTint();
-        //         },
-        //     })
-        //     eggTimeline.play();
-        //     this.add.tween({
-        //         targets: rays,
-        //         repeat: false,
-        //         duration: 1500,
-        //         angle: 200,
-        //         onComplete: () => {
-        //             rays.destroy();
-        //         },
-        //         onUpdate: () => {
-        //             rays.y = travelEgg.y + 30;
-        //         }
-        //     })
-        // });
         this.singalManager.on("levelTimerStart", () => {
             this.startLevelTime();
         })
@@ -109,7 +74,7 @@ export class Hud extends Scene {
     }
 
     createLevelTimer(){
-        this.levelTimeText = this.add.text(this.sys.canvas.width/2, 20, "0:00", {
+        this.levelTimeText = this.add.text(this.sys.canvas.width/2, 20, "1:15", {
             fontSize: "75px",
             color: "white"
         })
@@ -127,10 +92,21 @@ export class Hud extends Scene {
 
     startLevelTime(){
         //reset value
-        this.levelTime = 0;
+        this.levelTime = 75;
         //increment and update timer text every second
         this.levelTimeInterval = setInterval(() => {
-            this.levelTime++;
+            this.levelTime--;
+            if(this.levelTime <= 15 && this.levelTime > 0){
+                this.sound.play("timer");
+            } else if (this.levelTime == 0){
+                this.sound.play("lose");
+                this.stopLevelTime();
+                this.levelTimeText.setColor("#EB5234");
+                setTimeout(() => {
+                    this.singalManager.emit("returnTitle");
+                    this.scene.stop();
+                }, 3000);
+            }
             let seconds: string = '' + this.levelTime % 60;
             seconds = seconds.padStart(2, '0');
             this.levelTimeText.setText(`${Math.trunc(this.levelTime/60)}:${seconds}`);
@@ -139,6 +115,5 @@ export class Hud extends Scene {
 
     stopLevelTime(){
         clearInterval(this.levelTimeInterval);
-        this.levelTimeText.setColor("#FFD700");
     }
 }

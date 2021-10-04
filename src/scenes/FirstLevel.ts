@@ -1,6 +1,7 @@
 import { Loader, GameObjects, Scene } from 'phaser';
 import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { SignalManager } from '../services/SignalManager';
+import { Title } from './Title';
 
 export class FirstLevel extends Scene {
 
@@ -27,11 +28,15 @@ export class FirstLevel extends Scene {
         this.setupPlayer("pengoon");
         this.setupTilemap();
         this.createParallexBackground();
-        this.sound.play("forestMusic", {
+        this.sound.play("music", {
             loop: true,
             volume: .4
         })
         this.signalManager.emit("levelTimerStart");
+        this.signalManager.on("returnTitle",() => {
+            this.scene.start("Title");
+            this.sound.stopAll();
+        })
     }
 
     update() {
@@ -75,15 +80,11 @@ export class FirstLevel extends Scene {
     }
 
     setupTilemap() {
+        //add level map
         this.tilemap = this.make.tilemap({ key: "baseWorld" });
-
         let tileset = this.tilemap.addTilesetImage("texture", "baseLevelSpriteSheet");
-        //let objectTileset = this.tilemap.addTilesetImage("objects", "firstLevelObjectsheet");
-
         let collisionLayer = this.tilemap.createLayer("Tile Layer 1", [tileset], 0, 0);
-        //let overtop = this.tilemap.createLayer("overtop", [tileset, objectTileset], 0, 0);
-        //overtop.setDepth(5);
-
+        //add collision
         collisionLayer.setCollisionBetween(1, 999, true, true);
         this.physics.add.collider(this.playerSprite, collisionLayer);
 
@@ -91,6 +92,7 @@ export class FirstLevel extends Scene {
         this.cameras.main.startFollow(this.playerSprite);
         this.cameras.main.setZoom(0.5)
 
+        //add additional objects
         let objects = this.tilemap.getObjectLayer("objects");
         objects.objects.forEach((object) => {
             //add coins
@@ -100,7 +102,11 @@ export class FirstLevel extends Scene {
                 coinSprite.setScale(.1);
 
                 this.physics.add.overlap(this.playerSprite, coinSprite, () => {
-                    this.sound.play("coinPickupSound");
+                    let soundSelect = Math.floor(Math.random() * 3) + 1;
+                    console.log(soundSelect);
+                    this.sound.play("presentPickup0" + soundSelect, {
+                        volume: 1.5
+                    });
                     this.signalManager.emit("coinCollected", [this.playerSprite.x - this.cameras.main.scrollX, this.playerSprite.y - this.cameras.main.scrollY]);
                     coinSprite.destroy();
                 });
